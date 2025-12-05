@@ -179,9 +179,9 @@ $friendList = $friends->get_result();
 						<li class="list-group-item list-group-item-dark d-flex justify-content-between">
 							<?= htmlspecialchars($f['username']) ?>
 										
-							<a class="btn btn-primary btn-sm" href="chat.php?friend=<?= $f['id'] ?>">
-								Message
-							</a>
+							<a class="btn btn-primary btn-sm" href="start_chat.php?user_id=<?= $f['id'] ?>">
+                Message
+              </a>
 						</li>
 					<?php endwhile; ?>
 				</ul>
