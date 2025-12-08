@@ -63,7 +63,7 @@ $username = $isLoggedIn ? $_SESSION['username'] : null;
 
           <?php endif; ?>
 
-          <a class="btn btn-primary w-100 mb-2" href="admin/admin.php">Admin Panel</a>
+          <a class="btn btn-primary w-100 mb-2" href="admin.php">Admin Panel</a>
         </nav>
 
         <p class="text-light small">

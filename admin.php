@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['role']) || $_SESSION['role
     exit;
 }
 
-$conn = new mysqli("localhost", "root", "", "230messengerredone");
+$conn = new mysqli("localhost", "root", "", "jarredupdate");
 
 if ($conn->connect_error) {
     echo "<script>
@@ -37,8 +37,8 @@ $result = $stmt->get_result();
     <h2 class="text-center mb-4">User List</h2>
 
     <div class="mb-3 text-center">
-        <a href="../index.php" class="btn btn-primary">Index</a>
-        <a href="../chat.php" class="btn btn-primary">Chat</a>
+        <a href="index.php" class="btn btn-primary">Index</a>
+        <a href="chat.php" class="btn btn-primary">Chat</a>
     </div>
 
     <table class="table table-dark table-striped text-center">

@@ -2,7 +2,7 @@
 session_start();
 date_default_timezone_set('America/New_York');
 
-$conn = new mysqli("localhost", "root", "", "230messengerredone");
+$conn = new mysqli("localhost", "root", "", "jarredupdate");
 
 if ($conn->connect_error) {
     header("Location: login.php?error=db");
@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['role'] = $user['role'];
 
             if ($user['role'] === "admin") {
-                header("Location: admin/admin.php");
+                header("Location: admin.php");
                 exit;
             }
 

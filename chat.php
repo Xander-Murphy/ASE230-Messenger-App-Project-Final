@@ -150,16 +150,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_id'])) {
     $userID = $_SESSION['user_id'];
 
     if ($newContent !== "") {
-
-        if ($role === 'admin') {
-            // Admin can edit ANY message
-            $stmt = $conn->prepare("UPDATE messages SET content = ? WHERE id = ?");
-            $stmt->bind_param("si", $newContent, $msgID);
-        } else {
-            // Users can only edit their own messages
-            $stmt = $conn->prepare("UPDATE messages SET content = ? WHERE id = ? AND author_ID = ?");
-            $stmt->bind_param("sii", $newContent, $msgID, $userID);
-        }
+      $stmt = $conn->prepare("
+    	UPDATE messages
+    	SET content = ?
+    	WHERE id = ? AND author_ID = ?
+			");
+				$stmt->bind_param("sii", $newContent, $msgID, $userID);
 
         $stmt->execute();
         $stmt->close();
@@ -288,7 +284,9 @@ $stmt->close();
 
 						<?php if ($msg['author_ID'] == $userID || $_SESSION['role'] === 'admin'): ?>
 							<span class="float-end">
-								<button type="button" class="btn btn-sm btn-info" onclick="editMessage(<?= $msg['msg_id'] ?>)">Edit</button>
+								<?php if ($msg['author_ID'] == $userID): ?>
+    							<button type="button" class="btn btn-sm btn-info" onclick="editMessage(<?= $msg['msg_id'] ?>)">Edit</button>
+								<?php endif; ?>
 								<a href="delete_message.php?id=<?= $msg['msg_id'] ?>"
 									class="btn btn-sm btn-danger"
 									onclick="return confirm('Delete message?');">
@@ -328,14 +326,12 @@ $stmt->close();
 </main>
 
 <script>
-<script>
 	const chatBox = document.getElementById("chatMessages");
 	chatBox.scrollTop = chatBox.scrollHeight;
 
 	function editMessage(id) {
 		document.getElementById("view-" + id).classList.add("d-none");
 		document.getElementById("edit-" + id).classList.remove("d-none");
-	}
 	}
 
 	function cancelEdit(id) {
