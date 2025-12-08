@@ -2,10 +2,12 @@
 session_start();
 date_default_timezone_set('America/New_York');
 
-// Redirect if user is NOT logged in
 if (!isset($_SESSION['user_id']) || !isset($_SESSION['username'])) {
   header("Location: login.php");
   exit;
+}
+if (!isset($_SESSION['role'])) {
+  $_SESSION['role'] = 'user';
 }
 
 // --- DATABASE CONNECTION ---
@@ -24,20 +26,23 @@ $userID = $_SESSION['user_id'];
 $defaultRooms = ["Chat Room 1", "Chat Room 2", "Chat Room 3"];
 
 foreach ($defaultRooms as $index => $roomName) {
-  $roomID = $index + 1;
+	$roomID = $index + 1; // Rooms 1, 2, 3
 
-  $check = $conn->prepare("SELECT id FROM chat_rooms WHERE id = ?");
-  $check->bind_param("i", $roomID);
-  $check->execute();
-  $result = $check->get_result();
+	// Check if room ID exists
+	$check = $conn->prepare("SELECT id FROM chat_rooms WHERE id = ?");
+	$check->bind_param("i", $roomID);
+	$check->execute();
+	$result = $check->get_result();
 
-  if ($result->num_rows === 0) {
-    $insert = $conn->prepare("INSERT INTO chat_rooms (id, name) VALUES (?, ?)");
-    $insert->bind_param("is", $roomID, $roomName);
-    $insert->execute();
-    $insert->close();
-  }
-  $check->close();
+	if ($result->num_rows === 0) {
+		// Create missing room
+		$insert = $conn->prepare("INSERT INTO chat_rooms (id, name) VALUES (?, ?)");
+		$insert->bind_param("is", $roomID, $roomName);
+		$insert->execute();
+		$insert->close();
+	}
+
+	$check->close();
 }
 
 
@@ -139,9 +144,26 @@ while ($r = $roomResult->fetch_assoc()) {
 // -------------------------------------------
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_id'])) {
 
-	$msgID = intval($_POST['edit_id']);
-	$newContent = trim($_POST['new_content']);
+    $msgID = intval($_POST['edit_id']);
+    $newContent = trim($_POST['new_content']);
+    $role = $_SESSION['role'];
+    $userID = $_SESSION['user_id'];
 
+    if ($newContent !== "") {
+
+        if ($role === 'admin') {
+            // Admin can edit ANY message
+            $stmt = $conn->prepare("UPDATE messages SET content = ? WHERE id = ?");
+            $stmt->bind_param("si", $newContent, $msgID);
+        } else {
+            // Users can only edit their own messages
+            $stmt = $conn->prepare("UPDATE messages SET content = ? WHERE id = ? AND author_ID = ?");
+            $stmt->bind_param("sii", $newContent, $msgID, $userID);
+        }
+
+        $stmt->execute();
+        $stmt->close();
+    }
 	if ($newContent !== "") {
 		$stmt = $conn->prepare("
 			UPDATE messages
@@ -179,10 +201,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['message'])) {
 	exit;
 }
 
-
-// -------------------------------------------
-// LOAD MESSAGES
-// -------------------------------------------
+// --- LOAD MESSAGES WITH USERNAMES ---
 $messages = [];
 
 $stmt = $conn->prepare("
@@ -223,7 +242,6 @@ $stmt->close();
 <main class="container-fluid">
 	<div class="row">
 
-		<!-- Sidebar -->
 		<aside class="col-2 bg-secondary p-3 min-vh-100 text-center">
 			<h4 class="mb-3">Welcome, <?= htmlspecialchars($username); ?></h4>
 
@@ -252,7 +270,6 @@ $stmt->close();
 			</div>
 		</aside>
 
-		<!-- Chat Window -->
 		<section class="col-10 d-flex flex-column" style="height: calc(100vh - 10px);">
 
 			<h3 class="text-center mt-3">
@@ -269,7 +286,7 @@ $stmt->close();
 							<?= date("g:i A", strtotime($msg['created_at'])); ?>
 						</span>
 
-						<?php if ($msg['author_ID'] == $userID): ?>
+						<?php if ($msg['author_ID'] == $userID || $_SESSION['role'] === 'admin'): ?>
 							<span class="float-end">
 								<button type="button" class="btn btn-sm btn-info" onclick="editMessage(<?= $msg['msg_id'] ?>)">Edit</button>
 								<a href="delete_message.php?id=<?= $msg['msg_id'] ?>"
@@ -311,12 +328,14 @@ $stmt->close();
 </main>
 
 <script>
+<script>
 	const chatBox = document.getElementById("chatMessages");
 	chatBox.scrollTop = chatBox.scrollHeight;
 
 	function editMessage(id) {
 		document.getElementById("view-" + id).classList.add("d-none");
 		document.getElementById("edit-" + id).classList.remove("d-none");
+	}
 	}
 
 	function cancelEdit(id) {
