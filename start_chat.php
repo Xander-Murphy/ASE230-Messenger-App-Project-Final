@@ -1,6 +1,6 @@
 <?php
 session_start();
-$conn = new mysqli("localhost", "root", "", "230messengerredone");
+$conn = new mysqli("localhost", "root", "", "jarredupdate");
 
 if (!isset($_SESSION['user_id'])) {
   die("Not logged in");

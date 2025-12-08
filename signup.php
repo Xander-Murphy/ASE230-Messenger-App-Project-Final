@@ -8,7 +8,7 @@ $success = "";
 // Handle form submission
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
   // Connect to MySQL
-  $conn = new mysqli("localhost", "root", "", "230messengerredone");
+  $conn = new mysqli("localhost", "root", "", "jarredupdate");
 
   if ($conn->connect_error) {
     $error = "Database connection failed.";

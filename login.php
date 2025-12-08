@@ -14,7 +14,7 @@ $signupSuccess = isset($_GET['signup']) && $_GET['signup'] === "success";
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
   // 1. Connect to database
-  $conn = new mysqli("localhost", "root", "", "230messengerredone");
+  $conn = new mysqli("localhost", "root", "", "jarredupdate");
 
   if ($conn->connect_error) {
     die("Database connection failed: " . $conn->connect_error);

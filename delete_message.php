@@ -2,7 +2,7 @@
   session_start();
   if (!isset($_SESSION['user_id'])) { header("Location: login.php"); exit; }
 
-  $conn = new mysqli("localhost", "root", "", "230messengerredone");
+  $conn = new mysqli("localhost", "root", "", "jarredupdate");
 
   $msgID  = intval($_GET['id']);
   $userID = $_SESSION['user_id'];

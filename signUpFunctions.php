@@ -2,7 +2,7 @@
 session_start();
 
 // 1. Connect to MySQL
-$conn = new mysqli("localhost", "root", "", "230messengerredone");
+$conn = new mysqli("localhost", "root", "", "jarredupdate");
 
 // Check the connection
 if ($conn->connect_error) {

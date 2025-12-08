@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['username'])) {
 }
 
 // --- DATABASE CONNECTION ---
-$conn = new mysqli("localhost", "root", "", "230messengerredone");
+$conn = new mysqli("localhost", "root", "", "jarredupdate");
 if ($conn->connect_error) {
   die("Database connection failed: " . $conn->connect_error);
 }
