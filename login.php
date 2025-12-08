@@ -1,129 +1,76 @@
 <?php
 session_start();
+date_default_timezone_set('America/New_York');
 
-// If the user is already logged in, prevent returning to login page
-if (isset($_SESSION['user_id'])) {
-  header("Location: chat.php");
-  exit;
+$conn = new mysqli("localhost", "root", "", "230messengerredone");
+
+if ($conn->connect_error) {
+    header("Location: login.php?error=db");
+    exit;
 }
 
-$loginError = "";
-$signupSuccess = isset($_GET['signup']) && $_GET['signup'] === "success";
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-// Handle login form submission
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $username = trim($_POST['username']);
+    $password = trim($_POST['password']);
 
-  // 1. Connect to database
-  $conn = new mysqli("localhost", "root", "", "230messengerredone");
+    $stmt = $conn->prepare("SELECT id, username, password, role FROM users WHERE username = ?");
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-  if ($conn->connect_error) {
-    die("Database connection failed: " . $conn->connect_error);
-  }
+    if ($result->num_rows === 1) {
 
-  // 2. Gather input
-  $username = trim($_POST['username']);
-  $password = trim($_POST['password']);
+        $user = $result->fetch_assoc();
 
-  // 3. Prepare query to find user
-  $stmt = $conn->prepare("SELECT id, username, password FROM users WHERE username = ?");
-  $stmt->bind_param("s", $username);
-  $stmt->execute();
-  $result = $stmt->get_result();
+        if (password_verify($password, $user['password'])) {
 
-  // 4. Validate login
-  if ($result->num_rows === 1) {
-    $user = $result->fetch_assoc();
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['username'] = $user['username'];
+            $_SESSION['role'] = $user['role'];
 
-    if (password_verify($password, $user['password'])) {
+            if ($user['role'] === "admin") {
+                header("Location: admin/admin.php");
+                exit;
+            }
 
-      // Set session
-      $_SESSION['user_id'] = $user['id'];
-      $_SESSION['username'] = $user['username'];
-
-      header("Location: chat.php");
-      exit;
-
-    } else {
-      $loginError = "Invalid username or password.";
+            header("Location: index.php");
+            exit;
+        }
     }
 
-  } else {
-    $loginError = "Invalid username or password.";
-  }
-
-  $stmt->close();
-  $conn->close();
+    header("Location: login.php?error=invalid");
+    exit;
 }
 ?>
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Sign In</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
-<body class="bg-dark">
+<body class="bg-dark text-light">
 
-<header class="text-center text-light mt-3">
-  <h1>Login</h1>
-</header>
+<div class="container mt-5" style="max-width: 400px;">
+    <h2 class="text-center mb-4">Login</h2>
 
-<nav class="text-center mb-4">
-  <a class="btn btn-primary" href="index.php">Index</a>
-  <a class="btn btn-primary" href="signup.php">Sign Up</a>
-</nav>
-
-<div class="container mt-3">
-  <div class="row justify-content-center">
-    <div class="col-md-6">
-      <div class="card shadow">
-        <div class="card-body">
-          <h3 class="card-title text-center mb-4">Account Login</h3>
-
-          <!-- Signup success alert -->
-          <?php if ($signupSuccess): ?>
-            <div class="alert alert-success text-center">
-              Account created successfully! Please log in.
-            </div>
-          <?php endif; ?>
-
-          <!-- Login error alert -->
-            <?php if (!empty($loginError)): ?>
-              <div class="alert alert-danger text-center">
-            <?= htmlspecialchars($loginError) ?>
-              </div>
-            <?php endif; ?>
-
-          <form method="POST" action="">
-            <!-- Username -->
-            <div class="mb-3">
-              <label class="form-label">Username</label>
-              <input type="text" class="form-control" name="username" required>
-            </div>
-
-            <!-- Password -->
-            <div class="mb-3">
-              <label class="form-label">Password</label>
-              <input type="password" class="form-control" name="password" required>
-            </div>
-
-            <div class="form-text mb-3">
-              Don't have an account?
-              <a href="signup.php">Sign up here</a>
-            </div>
-
-            <div class="d-grid">
-              <button type="submit" class="btn btn-primary">Log In</button>
-            </div>
-          </form>
-
+    <?php if (isset($_GET['error'])): ?>
+        <div class="alert alert-danger">
+            Invalid username or password.
         </div>
-      </div>
-    </div>
-  </div>
+    <?php endif; ?>
+
+    <form method="POST">
+        <input class="form-control mb-3" type="text" name="username" placeholder="Username" required>
+        <input class="form-control mb-3" type="password" name="password" placeholder="Password" required>
+
+        <button class="btn btn-primary w-100">Login</button>
+    </form>
+
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
