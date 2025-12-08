@@ -2,10 +2,12 @@
 session_start();
 date_default_timezone_set('America/New_York');
 
-// Redirect if user is NOT logged in
 if (!isset($_SESSION['user_id']) || !isset($_SESSION['username'])) {
   header("Location: login.php");
   exit;
+}
+if (!isset($_SESSION['role'])) {
+  $_SESSION['role'] = 'user';
 }
 
 // --- DATABASE CONNECTION ---
@@ -18,16 +20,14 @@ if ($conn->connect_error) {
 $defaultRooms = ["Chat Room 1", "Chat Room 2", "Chat Room 3"];
 
 foreach ($defaultRooms as $index => $roomName) {
-	$roomID = $index + 1; // Rooms 1, 2, 3
+	$roomID = $index + 1;
 
-	// Check if room ID exists
 	$check = $conn->prepare("SELECT id FROM chat_rooms WHERE id = ?");
 	$check->bind_param("i", $roomID);
 	$check->execute();
 	$result = $check->get_result();
 
 	if ($result->num_rows === 0) {
-		// Create missing room
 		$insert = $conn->prepare("INSERT INTO chat_rooms (id, name) VALUES (?, ?)");
 		$insert->bind_param("is", $roomID, $roomName);
 		$insert->execute();
@@ -48,25 +48,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['chatID'])) {
 // --- HANDLE MESSAGE EDIT ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_id'])) {
 
-	$msgID = intval($_POST['edit_id']);
-	$newContent = trim($_POST['new_content']);
+    $msgID = intval($_POST['edit_id']);
+    $newContent = trim($_POST['new_content']);
+    $role = $_SESSION['role'];
+    $userID = $_SESSION['user_id'];
 
-	if ($newContent !== "") {
-		$stmt = $conn->prepare("
-			UPDATE messages 
-			SET content = ? 
-			WHERE id = ? AND author_ID = ?
-		");
-		$stmt->bind_param("sii", $newContent, $msgID, $userID);
-		$stmt->execute();
-		$stmt->close();
-	}
+    if ($newContent !== "") {
 
-	header("Location: chat.php");
-	exit;
+        if ($role === 'admin') {
+            // Admin can edit ANY message
+            $stmt = $conn->prepare("UPDATE messages SET content = ? WHERE id = ?");
+            $stmt->bind_param("si", $newContent, $msgID);
+        } else {
+            // Users can only edit their own messages
+            $stmt = $conn->prepare("UPDATE messages SET content = ? WHERE id = ? AND author_ID = ?");
+            $stmt->bind_param("sii", $newContent, $msgID, $userID);
+        }
+
+        $stmt->execute();
+        $stmt->close();
+    }
+
+    header("Location: chat.php");
+    exit;
 }
 
-$chatID = $_SESSION['chatID'] ?? 1; // default chat room 1
+$chatID = $_SESSION['chatID'] ?? 1;
 
 // --- HANDLE MESSAGE SUBMISSION ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['message'])) {
@@ -87,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['message'])) {
 	exit;
 }
 
-// --- LOAD MESSAGES WITH USERNAMES ---
+// --- LOAD MESSAGES ---
 $messages = [];
 
 $stmt = $conn->prepare("
@@ -121,7 +128,6 @@ $stmt->close();
 <main class="container-fluid">
 	<div class="row">
 
-		<!-- Sidebar -->
 		<aside class="col-2 bg-secondary p-3 min-vh-100 text-center">
 			<h4 class="mb-3">Welcome, <?= htmlspecialchars($username); ?></h4>
 
@@ -138,7 +144,6 @@ $stmt->close();
 
 			<h5>Chat Rooms</h5>
 
-			<!-- Chat room buttons -->
 			<form method="POST" class="d-grid gap-2">
 				<input type="hidden" name="chatID" value="1">
 				<button class="btn <?= ($chatID == 1 ? 'btn-light' : 'btn-outline-light') ?>">Chat Room 1</button>
@@ -155,12 +160,10 @@ $stmt->close();
 			</form>
 		</aside>
 
-		<!-- Chat Window -->
 		<section class="col-10 d-flex flex-column" style="height: calc(100vh - 10px);">
 
 			<h3 class="text-center mt-3">Chat Room <?= htmlspecialchars($chatID) ?></h3>
 
-			<!-- Messages -->
 			<ul id="chatMessages" class="list-unstyled mb-3 mt-3 flex-grow-1 overflow-auto px-3">
 				<?php foreach ($messages as $msg): ?>
 					<li class="list-group-item bg-dark text-light text-break border-0 mb-2" id="msg-<?= $msg['msg_id'] ?>">
@@ -170,7 +173,7 @@ $stmt->close();
 								<?= date("g:i A", strtotime($msg['created_at'])); ?>
 							</span>
 
-							<?php if ($msg['author_ID'] == $userID): ?>
+							<?php if ($msg['author_ID'] == $userID || $_SESSION['role'] === 'admin'): ?>
 								<span class="float-end">
 									<button type="button" class="btn btn-sm btn-info" onclick="editMessage(<?= $msg['msg_id'] ?>)">Edit</button>
 									<a href="delete_message.php?id=<?= $msg['msg_id'] ?>"
@@ -187,20 +190,18 @@ $stmt->close();
 							</span>
 						</div>
 
-						<!-- Hidden Edit Form -->
 						<form id="edit-<?= $msg['msg_id'] ?>" method="POST" class="d-none mt-2">
 							<input type="hidden" name="edit_id" value="<?= $msg['msg_id'] ?>">
 							<textarea name="new_content" class="form-control" required><?= htmlspecialchars($msg['content']); ?></textarea>
 							<div class="mt-2">
 								<button type="submit" class="btn btn-success btn-sm">Save</button>
 								<button type="button" class="btn btn-secondary btn-sm" onclick="cancelEdit(<?= $msg['msg_id'] ?>)">Cancel</button>
-								</div>
+							</div>
 						</form>
 					</li>
 				<?php endforeach; ?>
 			</ul>
 
-			<!-- Message Form -->
 			<form method="POST" class="input-group mb-3 mt-auto px-3">
 				<input type="text" name="message" class="form-control" placeholder="Type your message..." required autofocus>
 				<button class="btn btn-primary" type="submit">Send</button>
@@ -210,8 +211,7 @@ $stmt->close();
 	</div>
 </main>
 
-<script>  
-	// Auto-scroll to bottom
+<script>
 	const chatBox = document.getElementById("chatMessages");
 	chatBox.scrollTop = chatBox.scrollHeight;
 </script>
@@ -220,7 +220,7 @@ $stmt->close();
 	function editMessage(id) {
 		document.getElementById("view-" + id).classList.add("d-none");
 		document.getElementById("edit-" + id).classList.remove("d-none");
-}
+	}
 
 	function cancelEdit(id) {
 		document.getElementById("edit-" + id).classList.add("d-none");
