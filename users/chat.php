@@ -161,17 +161,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_id'])) {
         $stmt->execute();
         $stmt->close();
     }
-	if ($newContent !== "") {
-		$stmt = $conn->prepare("
-			UPDATE messages
-			SET content = ?
-			WHERE id = ? AND author_ID = ?
-		");
-		$stmt->bind_param("sii", $newContent, $msgID, $userID);
-		$stmt->execute();
-		$stmt->close();
-	}
-
+		
 	header("Location: chat.php?room_id=" . $chatID);
 	exit;
 }
