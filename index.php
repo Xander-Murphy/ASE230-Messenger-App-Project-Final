@@ -85,7 +85,7 @@ $username = $isLoggedIn ? $_SESSION['username'] : null;
         <section class="mb-5">
           <h2>About the App</h2>
           <p>
-            <strong><?= $siteName; ?></strong> is a web-based messaging application developed for the ASE 230 midterm project.
+            <strong><?= $siteName; ?></strong> is a web-based messaging application developed for the ASE 230 final project.
             It demonstrates an understanding of PHP, MySQL database integration, user authentication, and Bootstrap-driven UI design.
           </p>
         </section>
@@ -94,6 +94,8 @@ $username = $isLoggedIn ? $_SESSION['username'] : null;
           <h2>Features</h2>
           <ul class="list-group list-group-flush text-start">
             <li class="list-group-item bg-dark text-light">Real-time styled chat interface</li>
+            <li class="list-group-item bg-dark text-light">Ability to friend other users</li>
+            <li class="list-group-item bg-dark text-light">Private messages between friends</li>
             <li class="list-group-item bg-dark text-light">Secure login and registration system</li>
             <li class="list-group-item bg-dark text-light">Messages stored safely in a MySQL database</li>
             <li class="list-group-item bg-dark text-light">Selectable chat rooms</li>
@@ -141,7 +143,7 @@ $username = $isLoggedIn ? $_SESSION['username'] : null;
         <hr class="border-light my-5">
 
         <footer class="text-center">
-          <p><?= $siteName; ?> | ASE 230 Midterm Project</p>
+          <p><?= $siteName; ?> | ASE 230 Final Project</p>
         </footer>
 
       </section>
