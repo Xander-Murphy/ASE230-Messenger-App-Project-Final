@@ -62,17 +62,17 @@ $username = $isLoggedIn ? $_SESSION['username'] : null;
             <?php if ($isLoggedIn): ?>
               <a class="btn btn-primary w-100 mb-2" href="chat.php">Chat</a>
               <a class="btn btn-primary w-100 mb-2" href="friends.php">Friends</a>
-              <form action="logout.php" method="POST">
+              <form action="../signUpInOutFolder/logout.php" method="POST">
                 <button class="btn btn-danger w-100 mt-2" type="submit">Sign Out</button>
               </form>
               <p class="text-light mt-3 small">
                 Logged in as <strong><?= htmlspecialchars($username); ?></strong>
               </p>
             <?php else: ?>
-              <a class="btn btn-primary w-100 mb-2" href="signup.php">Sign Up</a>
-              <a class="btn btn-primary w-100 mb-2" href="login.php">Login</a>
+              <a class="btn btn-primary w-100 mb-2" href="../signUpInOutFolder/signup.php">Sign Up</a>
+              <a class="btn btn-primary w-100 mb-2" href="../signUpInOutFolder/login.php">Login</a>
             <?php endif; ?>
-            <a class="btn btn-primary w-100 mb-2" href="admin.php">Admin Panel</a>
+            <a class="btn btn-primary w-100 mb-2" href="../adminFolder/admin.php">Admin Panel</a>
           </nav>
           <p class="text-light small">
             <?= $greeting; ?>!<br>
@@ -94,7 +94,7 @@ $username = $isLoggedIn ? $_SESSION['username'] : null;
             <a class="btn btn-primary w-100 mb-2" href="chat.php">Chat</a>
             <a class="btn btn-primary w-100 mb-2" href="friends.php">Friends</a>
 
-            <form action="logout.php" method="POST">
+            <form action="../signUpInOutFolder/logout.php" method="POST">
               <button class="btn btn-danger w-100 mt-2" type="submit">Sign Out</button>
             </form>
 
@@ -104,12 +104,12 @@ $username = $isLoggedIn ? $_SESSION['username'] : null;
 
           <?php else: ?>
 
-            <a class="btn btn-primary w-100 mb-2" href="signup.php">Sign Up</a>
-            <a class="btn btn-primary w-100 mb-2" href="login.php">Login</a>
+            <a class="btn btn-primary w-100 mb-2" href="../signUpInOutFolder/signup.php">Sign Up</a>
+            <a class="btn btn-primary w-100 mb-2" href="../signUpInOutFolder/login.php">Login</a>
 
           <?php endif; ?>
 
-          <a class="btn btn-primary w-100 mb-2" href="admin.php">Admin Panel</a>
+          <a class="btn btn-primary w-100 mb-2" href="../adminFolder/admin.php">Admin Panel</a>
         </nav>
 
         <p class="text-light small">
@@ -158,7 +158,7 @@ $username = $isLoggedIn ? $_SESSION['username'] : null;
           </ol>
 
           <?php if (!$isLoggedIn): ?>
-            <a href="signup.php" class="btn btn-primary mt-3">Get Started</a>
+            <a href="../signUpInOutFolder/signup.php" class="btn btn-primary mt-3">Get Started</a>
           <?php else: ?>
             <a href="chat.php" class="btn btn-primary mt-3">Go to Chat</a>
           <?php endif; ?>

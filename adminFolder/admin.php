@@ -4,7 +4,7 @@ session_start();
 if (!isset($_SESSION['user_id']) || !isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     echo "<script>
             alert('You are not the admin, please log into the admin account');
-            window.location.href = '/final/login.php';
+            window.location.href = '../signUpInOutFolder/login.php';
           </script>";
     exit;
 }
@@ -14,7 +14,7 @@ $conn = new mysqli("localhost", "root", "", "jarredupdate");
 if ($conn->connect_error) {
     echo "<script>
             alert('Database connection failed');
-            window.location.href = '/final/login.php';
+            window.location.href = '../signUpInOutFolder/login.php';
           </script>";
     exit;
 }
@@ -37,8 +37,8 @@ $result = $stmt->get_result();
     <h2 class="text-center mb-4">User List</h2>
 
     <div class="mb-3 text-center">
-        <a href="index.php" class="btn btn-primary">Index</a>
-        <a href="chat.php" class="btn btn-primary">Chat</a>
+        <a href="../users/index.php" class="btn btn-primary">Index</a>
+        <a href="../users/chat.php" class="btn btn-primary">Chat</a>
     </div>
 
     <table class="table table-dark table-striped text-center">

@@ -76,7 +76,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
   <!-- Navigation -->
   <nav class="text-center mb-4">
-    <a class="btn btn-primary" href="index.php">Home</a>
+    <a class="btn btn-primary" href="../users/index.php">Home</a>
     <a class="btn btn-primary" href="login.php">Login</a>
   </nav>
 

@@ -7,7 +7,7 @@ $hour = date("H");
 $greeting = ($hour < 12) ? "Good Morning" : "Good Evening";
 // Make sure user is logged in
 if (!isset($_SESSION['user_id'])) {
-  header("Location: login.php");
+  header("Location: ../signUpInOutFolder/login.php");
   exit;
 }
 
@@ -161,17 +161,17 @@ $friendList = $friends->get_result();
             <?php if ($isLoggedIn): ?>
               <a class="btn btn-primary w-100 mb-2" href="chat.php">Chat</a>
               <a class="btn btn-primary w-100 mb-2" href="friends.php">Friends</a>
-              <form action="logout.php" method="POST">
+              <form action="../signUpInOutFolder/logout.php" method="POST">
                 <button class="btn btn-danger w-100 mt-2" type="submit">Sign Out</button>
               </form>
               <p class="text-light mt-3 small">
                 Logged in as <strong><?= htmlspecialchars($username); ?></strong>
               </p>
             <?php else: ?>
-              <a class="btn btn-primary w-100 mb-2" href="signup.php">Sign Up</a>
-              <a class="btn btn-primary w-100 mb-2" href="login.php">Login</a>
+              <a class="btn btn-primary w-100 mb-2" href="../signUpInOutFolder/signup.php">Sign Up</a>
+              <a class="btn btn-primary w-100 mb-2" href="../signUpInOutFolder/login.php">Login</a>
             <?php endif; ?>
-            <a class="btn btn-primary w-100 mb-2" href="admin.php">Admin Panel</a>
+            <a class="btn btn-primary w-100 mb-2" href="../adminFolder/admin.php">Admin Panel</a>
           </nav>
           <p class="text-light small">
             <?= $greeting; ?>!<br>
@@ -193,7 +193,7 @@ $friendList = $friends->get_result();
             <a class="btn btn-primary w-100 mb-2" href="chat.php">Chat</a>
             <a class="btn btn-primary w-100 mb-2" href="friends.php">Friends</a>
 
-            <form action="logout.php" method="POST">
+            <form action="../signUpInOutFolder/logout.php" method="POST">
               <button class="btn btn-danger w-100 mt-2" type="submit">Sign Out</button>
             </form>
 
@@ -203,12 +203,12 @@ $friendList = $friends->get_result();
 
           <?php else: ?>
 
-            <a class="btn btn-primary w-100 mb-2" href="signup.php">Sign Up</a>
-            <a class="btn btn-primary w-100 mb-2" href="login.php">Login</a>
+            <a class="btn btn-primary w-100 mb-2" href="../signUpInOutFolder/signup.php">Sign Up</a>
+            <a class="btn btn-primary w-100 mb-2" href="../signUpInOutFolder/login.php">Login</a>
 
           <?php endif; ?>
 
-          <a class="btn btn-primary w-100 mb-2" href="admin.php">Admin Panel</a>
+          <a class="btn btn-primary w-100 mb-2" href="../adminFolder/admin.php">Admin Panel</a>
         </nav>
 
         <p class="text-light small">

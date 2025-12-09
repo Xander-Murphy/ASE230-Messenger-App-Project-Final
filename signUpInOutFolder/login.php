@@ -4,7 +4,7 @@ date_default_timezone_set('America/New_York');
 
 // If already logged in, redirect
 if (isset($_SESSION['user_id'])) {
-    header("Location: index.php");
+    header("Location: ../users/index.php");
     exit;
 }
 
@@ -50,11 +50,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['role'] = $user['role'];
 
             if ($user['role'] === "admin") {
-                header("Location: admin.php");
+                header("Location: ../adminFolder/admin.php");
                 exit;
             }
 
-            header("Location: index.php");
+            header("Location: ../users/index.php");
             exit;
         }
     }
@@ -78,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </header>
 
 <nav class="text-center mb-4">
-    <a class="btn btn-primary" href="index.php">Index</a>
+    <a class="btn btn-primary" href="../users/index.php">Index</a>
     <a class="btn btn-primary" href="signup.php">Sign Up</a>
 </nav>
 

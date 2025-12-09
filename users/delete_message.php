@@ -1,6 +1,6 @@
 <?php
   session_start();
-  if (!isset($_SESSION['user_id']) || !isset($_SESSION['role'])) { header("Location: login.php"); 
+  if (!isset($_SESSION['user_id']) || !isset($_SESSION['role'])) { header("Location: ../signUpInOutFolder/login.php"); 
     exit; 
 }
 

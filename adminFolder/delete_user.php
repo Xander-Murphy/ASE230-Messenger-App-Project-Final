@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-    header("Location: login.php");
+    header("Location: ../signUpInOutFolder/login.php");
     exit;
 }
 
@@ -13,7 +13,7 @@ if (!isset($_GET['id'])) {
 
 $id = intval($_GET['id']);
 
-$conn = new mysqli("localhost", "root", "", "230messengerredone");
+$conn = new mysqli("localhost", "root", "", "jarredupdate");
 
 if ($conn->connect_error) {
     header("Location: admin.php?error=db");

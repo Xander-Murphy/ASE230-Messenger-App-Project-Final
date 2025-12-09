@@ -4,7 +4,7 @@ date_default_timezone_set('America/New_York');
 $isLoggedIn = isset($_SESSION['username']);
 
 if (!isset($_SESSION['user_id']) || !isset($_SESSION['username'])) {
-  header("Location: login.php");
+  header("Location: ../signUpInOutFolder/login.php");
   exit;
 }
 if (!isset($_SESSION['role'])) {
@@ -248,10 +248,10 @@ $stmt->close();
       <a class="btn btn-primary w-100 mb-2" href="index.php">Home</a>
 
       <?php if ($isLoggedIn): ?>
-        <a class="btn btn-primary w-100 mb-2" href="chat.php">Chat</a>
+        <a class="btn btn-primary w-100 mb-2" href="chat.php">Refresh Chat</a>
         <a class="btn btn-primary w-100 mb-2" href="friends.php">Friends</a>
 
-        <form action="logout.php" method="POST">
+        <form action="../signUpInOutFolder/logout.php" method="POST">
           <button class="btn btn-danger w-100 mt-2" type="submit">Sign Out</button>
         </form>
 
@@ -260,11 +260,11 @@ $stmt->close();
         </p>
 
       <?php else: ?>
-        <a class="btn btn-primary w-100 mb-2" href="signup.php">Sign Up</a>
-        <a class="btn btn-primary w-100 mb-2" href="login.php">Login</a>
+        <a class="btn btn-primary w-100 mb-2" href="../signUpInOutFolder/signup.php">Sign Up</a>
+        <a class="btn btn-primary w-100 mb-2" href="../signUpInOutFolder/login.php">Login</a>
       <?php endif; ?>
 
-      <a class="btn btn-primary w-100 mb-2" href="admin.php">Admin Panel</a>
+      <a class="btn btn-primary w-100 mb-2" href="../adminFolder/admin.php">Admin Panel</a>
     </nav>
   </div>
 </div>
@@ -280,15 +280,28 @@ $stmt->close();
 		<aside class="col-2 bg-secondary p-3 min-vh-100 text-center d-none d-md-block">
 			<h4 class="mb-3">Welcome, <?= htmlspecialchars($username); ?></h4>
 
-			<nav class="d-grid gap-2 mb-4">
-				<a class="btn btn-primary" href="index.php">Index</a>
-				<a class="btn btn-primary" href="chat.php">Refresh Chat</a>
-				<a class="btn btn-primary" href="friends.php">Friends</a>
+			<nav class="mb-4">
+      <a class="btn btn-primary w-100 mb-2" href="index.php">Home</a>
 
-				<form action="logout.php" method="POST">
-					<button class="btn btn-danger w-100" type="submit">Sign Out</button>
-				</form>
-			</nav>
+      <?php if ($isLoggedIn): ?>
+        <a class="btn btn-primary w-100 mb-2" href="chat.php">Refresh Chat</a>
+        <a class="btn btn-primary w-100 mb-2" href="friends.php">Friends</a>
+
+        <form action="../signUpInOutFolder/logout.php" method="POST">
+          <button class="btn btn-danger w-100 mt-2" type="submit">Sign Out</button>
+        </form>
+
+        <p class="text-light mt-3 small">
+          Logged in as <strong><?= htmlspecialchars($username); ?></strong>
+        </p>
+
+      <?php else: ?>
+        <a class="btn btn-primary w-100 mb-2" href="../signUpInOutFolder/signup.php">Sign Up</a>
+        <a class="btn btn-primary w-100 mb-2" href="../signUpInOutFolder/login.php">Login</a>
+      <?php endif; ?>
+
+      <a class="btn btn-primary w-100 mb-2" href="../adminFolder/admin.php">Admin Panel</a>
+    </nav>
 
 			<hr>
 
