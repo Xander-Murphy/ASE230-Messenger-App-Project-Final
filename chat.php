@@ -1,6 +1,7 @@
 <?php
 session_start();
 date_default_timezone_set('America/New_York');
+$isLoggedIn = isset($_SESSION['username']);
 
 if (!isset($_SESSION['user_id']) || !isset($_SESSION['username'])) {
   header("Location: login.php");
@@ -224,6 +225,7 @@ $stmt->close();
   <title>Chat Application</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 	<style>
     .rooms-scroll {
       max-height: 50vh;       /* prevents sidebar from getting too tall */
@@ -235,10 +237,47 @@ $stmt->close();
 
 <body class="d-flex flex-column min-vh-100 text-light bg-dark">
 
+<!-- MOBILE OFFCANVAS SIDEBAR -->
+<div class="offcanvas offcanvas-start bg-secondary text-light d-md-none" tabindex="-1" id="mobileSidebar">
+  <div class="offcanvas-header">
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+  </div>
+  <div class="offcanvas-body">
+    <!-- Sidebar content -->
+    <nav class="mb-4">
+      <a class="btn btn-primary w-100 mb-2" href="index.php">Home</a>
+
+      <?php if ($isLoggedIn): ?>
+        <a class="btn btn-primary w-100 mb-2" href="chat.php">Chat</a>
+        <a class="btn btn-primary w-100 mb-2" href="friends.php">Friends</a>
+
+        <form action="logout.php" method="POST">
+          <button class="btn btn-danger w-100 mt-2" type="submit">Sign Out</button>
+        </form>
+
+        <p class="text-light mt-3 small">
+          Logged in as <strong><?= htmlspecialchars($username); ?></strong>
+        </p>
+
+      <?php else: ?>
+        <a class="btn btn-primary w-100 mb-2" href="signup.php">Sign Up</a>
+        <a class="btn btn-primary w-100 mb-2" href="login.php">Login</a>
+      <?php endif; ?>
+
+      <a class="btn btn-primary w-100 mb-2" href="admin.php">Admin Panel</a>
+    </nav>
+  </div>
+</div>
+
 <main class="container-fluid">
 	<div class="row">
-
-		<aside class="col-2 bg-secondary p-3 min-vh-100 text-center">
+		<button class="btn btn-secondary d-md-none m-3" 
+        type="button" 
+        data-bs-toggle="offcanvas" 
+        data-bs-target="#mobileSidebar">
+  ☰ Menu
+</button>		
+		<aside class="col-2 bg-secondary p-3 min-vh-100 text-center d-none d-md-block">
 			<h4 class="mb-3">Welcome, <?= htmlspecialchars($username); ?></h4>
 
 			<nav class="d-grid gap-2 mb-4">
