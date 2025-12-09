@@ -4,7 +4,7 @@ session_start();
 if (!isset($_SESSION['user_id']) || !isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     echo "<script>
             alert('You are not the admin, please log into the admin account');
-            window.location.href = '/ASE230-Messenger-App-Project-Final/login.php';
+            window.location.href = '/final/login.php';
           </script>";
     exit;
 }
@@ -14,7 +14,7 @@ $conn = new mysqli("localhost", "root", "", "jarredupdate");
 if ($conn->connect_error) {
     echo "<script>
             alert('Database connection failed');
-            window.location.href = '/ASE230-Messenger-App-Project-Final/login.php';
+            window.location.href = '/final/login.php';
           </script>";
     exit;
 }
