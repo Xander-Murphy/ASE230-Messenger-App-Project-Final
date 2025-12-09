@@ -66,23 +66,22 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
 </head>
-<body class="bg-dark text-light">
+<body class="bg-dark">
 
   <!-- Header -->
-  <header class="text-center py-4">
+  <header class="text-center text-light mt-3">
     <h1>Create Your Account</h1>
     <p class="lead">Join 230-Messenger today</p>
   </header>
 
   <!-- Navigation -->
-  <nav class="text-center mb-3">
-    <a class="btn btn-primary mx-2" href="index.php">Home</a>
-    <a class="btn btn-primary mx-2" href="login.php">Login</a>
-    <a class="btn btn-primary mx-2" href="chat.php">Chat</a>
+  <nav class="text-center mb-4">
+    <a class="btn btn-primary" href="index.php">Home</a>
+    <a class="btn btn-primary" href="login.php">Login</a>
   </nav>
 
   <!-- Signup Container -->
-  <div class="container mt-4">
+  <div class="container mt-3">
     <div class="row justify-content-center">
       <div class="col-md-6">
 
@@ -101,8 +100,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
           </div>
         <?php endif; ?>
 
-        <div class="card bg-secondary text-light shadow border-0">
-          <div class="card-body p-4">
+        <div class="card shadow">
+          <div class="card-body">
 
             <h3 class="text-center mb-4">Sign Up</h3>
 
@@ -117,7 +116,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
               <!-- Email -->
               <div class="mb-3">
                 <label for="email" class="form-label">Email address</label>
-                <input type="email" class="form-control" id="email" name="email" requiredplaceholder="you@example.com" value="<?= isset($_POST['email']) ? htmlspecialchars($_POST['email']) : '' ?>">
+                <input type="email" class="form-control" id="email" name="email" required placeholder="you@example.com" value="<?= isset($_POST['email']) ? htmlspecialchars($_POST['email']) : '' ?>">
               </div>
 
               <!-- Password -->
@@ -125,13 +124,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <label for="password" class="form-label">Password</label>
                 <div class="input-group">
                   <input type="password" class="form-control" id="password" name="password" requiredminlength="6" placeholder="Enter a secure password">
-                  <button class="btn btn-outline-light" type="button" id="togglePassword"> Show </button>
+                  <button class="btn btn-outline-dark" type="button" id="togglePassword"> Show </button>
                 </div>
-                <small class="form-text text-light">Must be at least 6 characters.</small>
+                <small class="form-text text-dark">Must be at least 6 characters.</small>
               </div>
 
               <!-- Login Link -->
-              <p class="form-text text-light">
+              <p class="form-text text-dark">
                 Already have an account? 
                 <a href="login.php" class="text-info">Sign in here</a>.
               </p>
