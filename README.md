@@ -6,13 +6,15 @@ The Web-Based Messaging Application aims to provide a real-time communication pl
 ## Project Collaborators
 
 ### Xander Murphy
-- 
-
-### Jarred Engleman
-- 
+- Everything chat related
+- Friends list
+- Continuity and management of the github repo and making of this slideshow
 
 ### Jack Dixon
-- 
+- Refined the ERD
+
+### Jarred Engleman
+- Admin page and functions
 
 ## Video Link
 https://youtu.be/_iqZLNZukZE 
