@@ -8,7 +8,7 @@ The Web-Based Messaging Application aims to provide a real-time communication pl
 ### Xander Murphy
 - Everything chat related
 - Friends list
-- Continuity and management of the github repo and making of this slideshow
+- Continuity and management of the github repo and making of the slideshow
 
 ### Jack Dixon
 - Refined the ERD
