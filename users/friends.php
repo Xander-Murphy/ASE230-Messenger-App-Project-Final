@@ -19,6 +19,7 @@ if ($conn->connect_error) {
 $userID = $_SESSION['user_id'];
 $isLoggedIn = isset($_SESSION['username']);
 $username = $isLoggedIn ? $_SESSION['username'] : null;
+$userRole = $isLoggedIn ? $_SESSION['role'] : null;
 
 // --- SEND FRIEND REQUEST ---
 if (isset($_POST['add_friend_username'])) {
@@ -171,7 +172,9 @@ $friendList = $friends->get_result();
               <a class="btn btn-primary w-100 mb-2" href="../signUpInOutFolder/signup.php">Sign Up</a>
               <a class="btn btn-primary w-100 mb-2" href="../signUpInOutFolder/login.php">Login</a>
             <?php endif; ?>
-            <a class="btn btn-primary w-100 mb-2" href="../adminFolder/admin.php">Admin Panel</a>
+            <?php if ($userRole == "admin")
+              echo '<a class="btn btn-primary w-100 mb-2" href="../adminFolder/admin.php">Admin Panel</a>';
+            ?>
           </nav>
           <p class="text-light small">
             <?= $greeting; ?>!<br>
@@ -207,8 +210,9 @@ $friendList = $friends->get_result();
             <a class="btn btn-primary w-100 mb-2" href="../signUpInOutFolder/login.php">Login</a>
 
           <?php endif; ?>
-
-          <a class="btn btn-primary w-100 mb-2" href="../adminFolder/admin.php">Admin Panel</a>
+          <?php if ($userRole == "admin")
+            echo '<a class="btn btn-primary w-100 mb-2" href="../adminFolder/admin.php">Admin Panel</a>'
+          ?>
         </nav>
 
         <p class="text-light small">
