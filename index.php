@@ -19,6 +19,7 @@ $developers = [
 // Session
 $isLoggedIn = isset($_SESSION['username']);
 $username = $isLoggedIn ? $_SESSION['username'] : null;
+$userRole = $isLoggedIn  ? $_SESSION['role'] : null;
 ?>
 
 <!DOCTYPE html>
@@ -62,8 +63,10 @@ $username = $isLoggedIn ? $_SESSION['username'] : null;
             <a class="btn btn-primary w-100 mb-2" href="login.php">Login</a>
 
           <?php endif; ?>
-
-          <a class="btn btn-primary w-100 mb-2" href="admin.php">Admin Panel</a>
+          <?php if ($userRole == "admin")
+           echo  '<a class="btn btn-primary w-100 mb-2" href="admin.php">Admin Panel</a>'
+          ?>
+          
         </nav>
 
         <p class="text-light small">
