@@ -14,7 +14,7 @@ $signupSuccess = isset($_GET['signup']) && $_GET['signup'] === "success";
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
   // 1. Connect to database
-  $conn = new mysqli("localhost", "root", "", "230messengerredone");
+  $conn = new mysqli("localhost", "root", "", "jarredupdate");
 
   if ($conn->connect_error) {
     die("Database connection failed: " . $conn->connect_error);
@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   $password = trim($_POST['password']);
 
   // 3. Prepare query to find user
-  $stmt = $conn->prepare("SELECT id, username, password FROM users WHERE username = ?");
+  $stmt = $conn->prepare("SELECT id, username, password, role FROM users WHERE username = ?");
   $stmt->bind_param("s", $username);
   $stmt->execute();
   $result = $stmt->get_result();
@@ -40,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
       $_SESSION['user_id'] = $user['id'];
       $_SESSION['username'] = $user['username'];
       $_SESSION['role'] = $user['role'];
-
+      
       header("Location: chat.php");
       exit;
 

@@ -11,7 +11,7 @@ if (!isset($_SESSION['user_id'])) {
   exit;
 }
 
-$conn = new mysqli("localhost", "root", "", "230messengerredone");
+$conn = new mysqli("localhost", "root", "", "jarredupdate");
 if ($conn->connect_error) {
   die("Database connection failed: " . $conn->connect_error);
 }
