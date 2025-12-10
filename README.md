@@ -17,6 +17,6 @@ The Web-Based Messaging Application aims to provide a real-time communication pl
 - Admin page and functions
 
 ## Video Link
-https://youtu.be/_iqZLNZukZE 
+https://www.youtube.com/watch?v=4heAlSnLqw0
 ## Mini Presentation Link
 https://docs.google.com/presentation/d/1HysQ-TpMOU5RA6goLO1BoNR_T4CWG_kyLMXbg5E2T80/edit?usp=sharing
