@@ -19,6 +19,7 @@ if ($conn->connect_error) {
 
 $username = $_SESSION['username'];
 $userID = $_SESSION['user_id'];
+$userRole = $_SESSION['role'];
 
 
 // -------------------------------------------
@@ -254,7 +255,9 @@ $stmt->close();
         <a class="btn btn-primary w-100 mb-2" href="../signUpInOutFolder/login.php">Login</a>
       <?php endif; ?>
 
-      <a class="btn btn-primary w-100 mb-2" href="../adminFolder/admin.php">Admin Panel</a>
+      <?php if ($userRole == "admin")
+			echo '<a class="btn btn-primary w-100 mb-2" href="../adminFolder/admin.php">Admin Panel</a>';
+		?>
     </nav>
   </div>
 </div>
@@ -290,7 +293,9 @@ $stmt->close();
         <a class="btn btn-primary w-100 mb-2" href="../signUpInOutFolder/login.php">Login</a>
       <?php endif; ?>
 
-      <a class="btn btn-primary w-100 mb-2" href="../adminFolder/admin.php">Admin Panel</a>
+      <?php if ($userRole == "admin")
+			echo '<a class="btn btn-primary w-100 mb-2" href="../adminFolder/admin.php">Admin Panel</a>';
+		?>
     </nav>
 
 			<hr>
